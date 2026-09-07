@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import { resources } from '../../lib/resources';
+import { site, t } from '../../lib/site';
+export function getStaticPaths() { return site.resourcesEnabled ? [{ params: { path: undefined } }] : []; }
+const categories = [...new Set(resources.map(r => r.category))];
+---
+<Base title={`${site.resourceTitle} · ${site.title}`} description={site.resourceDescription}>
+<header class="page-heading"><h1>{site.resourceTitle}</h1><p>{site.resourceDescription}</p></header>
+<nav class="resource-toc" aria-label={t('资源目录','Resource directory')}>
+  {categories.map((category,i) => <a href={`#category-${i}`}>{category} ({resources.filter(r => r.category === category).length})</a>)}
+</nav>
+{categories.map((category,i) => <section id={`category-${i}`}><div class="section-bar"><h2>{category}</h2></div>
+{resources.filter(r => r.category === category).map(resource => <article class="resource-brief" id={resource.id}>
+  <h3><a href={resource.url} target="_blank" rel="noreferrer">{resource.name} ↗</a></h3><p>{resource.summary}</p>
+  <dl>{resource.fields.map(f => <><dt>{f.label}</dt><dd>{f.value}</dd></>)}</dl>
+  <p class="tags">{resource.tags.join(' · ')}</p>
+  <p>{t('来源','Sources')}: {resource.sources.map(s => <a href={s.url} target="_blank" rel="noreferrer">{s.label} ↗ </a>)}</p>
+  <small>{t('核验日期','Checked')}: {resource.updatedAt}</small>
+</article>)}
+</section>)}
+{!resources.length && <p>{t('暂未收录资源。','No resources listed yet.')}</p>}
+</Base>
+<style>
+.resource-toc{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:2rem}
+dl{display:grid;grid-template-columns:minmax(100px,1fr) 3fr;gap:.6rem 1rem}dt{font-weight:600}dd{margin:0;overflow-wrap:anywhere}section,article{scroll-margin-top:2rem}
+@media(max-width:600px){dl{grid-template-columns:1fr}dd{margin-bottom:.6rem}}
+</style>

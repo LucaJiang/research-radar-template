@@ -1,0 +1,5 @@
+---
+import Base from '../layouts/Base.astro';
+import { t, withBase } from '../lib/site';
+---
+<Base title="404"><header class="page-heading"><h1>{t('未找到页面','Page not found')}</h1><a href={withBase('/')}>{t('返回首页','Return home')}</a></header></Base>

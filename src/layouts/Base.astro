@@ -1,0 +1,37 @@
+---
+import 'katex/dist/katex.min.css';
+import '../styles/review.css';
+import { site, t, withBase } from '../lib/site';
+interface Props { title?: string; description?: string; }
+const { title = site.title, description = site.description } = Astro.props;
+const nav = [['/', t('最新', 'Latest')], ['/archive/', t('归档', 'Archive')], ['/topics/', t('研究主题', 'Topics')],
+  ...(site.resourcesEnabled ? [['/resources/', t('科研资源', 'Resources')]] : []), ['/search/', t('搜索', 'Search')]];
+const path = Astro.url.pathname;
+---
+<!doctype html>
+<html lang={site.language}>
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content={description}/>
+    <meta name="theme-color" content="#fbfcfa"/>
+    <title>{title}</title>
+    <link rel="canonical" href={new URL(path, Astro.site)}/>
+    <link rel="icon" href={withBase('/favicon.svg')}/>
+    <link rel="alternate" type="application/rss+xml" title={site.title} href={withBase('/rss.xml')}/>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t('跳至正文', 'Skip to content')}</a>
+    <header class="site-header"><div class="site-wrap header-inner">
+      <a class="brand" href={withBase('/')}><strong>{site.title}<span class="brand-dot">.</span></strong><span>{site.tagline}</span></a>
+      <nav aria-label={t('主导航', 'Main navigation')}>
+        {nav.map(([url,label]) => <a href={withBase(url)} aria-current={(url === '/' ? path === withBase('/') : path.startsWith(withBase(url))) ? 'page' : undefined}>{label}</a>)}
+      </nav>
+    </div></header>
+    <main id="main" class="site-wrap"><slot/></main>
+    <footer class="site-wrap site-footer"><span>{site.title}</span><div>
+      <a href={withBase('/rss.xml')}>RSS</a>
+      {site.repositoryUrl && <a href={site.repositoryUrl} target="_blank" rel="noreferrer">GitHub</a>}
+    </div></footer>
+  </body>
+</html>

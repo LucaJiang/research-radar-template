@@ -1,0 +1,28 @@
+---
+import { site, t, withBase } from '../../lib/site';
+import Base from '../../layouts/Base.astro';
+import PaperCard from '../../components/PaperCard.astro';
+import ResourceBrief from '../../components/ResourceBrief.astro';
+import { render } from 'astro:content';
+import { publishedIssues, publishedPapers, resolvePapers, iso, dateLabel } from '../../lib/issues';
+
+export async function getStaticPaths() {
+  return (await publishedIssues()).map(entry => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const papers = resolvePapers(entry, await publishedPapers());
+const { Content } = await render(entry);
+---
+<Base title={`${iso(entry.data.date)} · ${site.title}`} description={entry.data.summary}>
+  <a class="back" href={withBase("/archive/")}>{t("← 日报归档","\u2190 Issue archive")}</a>
+  <header class="issue-header">
+    <div class="eyebrow"><time datetime={iso(entry.data.date)}>{dateLabel(entry.data.date)}</time><span>{papers.length} {t('篇论文','papers')}{entry.data.briefs.length ? ` · ${entry.data.briefs.length} ${t('项简报','briefs')}` : ''}</span></div>
+    <h1>{entry.data.title}</h1>
+    <p>{entry.data.summary}</p>
+  </header>
+  <div class="section-bar"><h2>{t("本期论文","Papers in this issue")}</h2><span>{t("论文日期见各条目","Publication dates shown per paper")}</span></div>
+  <section class="paper-list" aria-label={t("本期论文","Papers in this issue")}>{papers.map((p,i) => <PaperCard paper={p} index={i + 1}/>)}</section>
+  {entry.data.briefs.length > 0 && <section class="briefs"><div class="section-bar"><h2>{t("数据资源","Resources")}</h2></div>{entry.data.briefs.map(b => <ResourceBrief brief={b}/>)}</section>}
+  {entry.body?.trim() && <section class="daily-notes prose"><Content/></section>}
+</Base>

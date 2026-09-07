@@ -1,0 +1,11 @@
+import { readFileSync } from 'node:fs';
+export const config = JSON.parse(readFileSync(new URL('./site.config.json', import.meta.url), 'utf8'));
+export const siteUrl = process.env.SITE_URL || config.siteUrl;
+const candidate = process.env.BASE_PATH ?? config.base;
+if (!/^\/(?:[a-zA-Z0-9_-]+\/)*$/.test(candidate)) throw new Error('base / BASE_PATH must be / or /repository-name/');
+export const basePath = candidate;
+const url = new URL(siteUrl);
+if (!['http:', 'https:'].includes(url.protocol) || url.pathname !== '/' || url.search || url.hash) throw new Error('siteUrl / SITE_URL must be an origin, e.g. https://your-site.pages.dev; put the path in base');
+if (!['en', 'zh-CN'].includes(config.language)) throw new Error('language must be en or zh-CN');
+if (typeof config.resourcesEnabled !== 'boolean') throw new Error('resourcesEnabled must be a boolean');
+export const withBase = path => /^(?:[a-z]+:|\/\/|#)/i.test(path) || (basePath !== '/' && path.startsWith(basePath)) ? path : basePath + path.replace(/^\/+/, '');

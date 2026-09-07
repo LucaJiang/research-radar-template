@@ -1,0 +1,17 @@
+{
+  "title": "Research Radar",
+  "description": "Research papers, reading notes, and ideas worth revisiting.",
+  "tagline": "PAPERS · METHODS · EVIDENCE",
+  "siteUrl": "https://example.com",
+  "base": "/",
+  "language": "en",
+  "repositoryUrl": "",
+  "resourcesEnabled": false,
+  "resourceTitle": "Research resources",
+  "resourceDescription": "Datasets, benchmarks, archives, and tools selected for this research field.",
+  "searchExamples": [
+    "example",
+    "evaluation",
+    "示例"
+  ]
+}

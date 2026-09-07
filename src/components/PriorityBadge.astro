@@ -1,0 +1,7 @@
+---
+import { t } from '../lib/site';
+interface Props{priority:string;}
+const {priority}=Astro.props;
+const labels:Record<string,string>={'must-read':t('重点阅读','Must read'),'worth-reading':t('值得关注','Worth reading'),skim:t('简读','Skim')};
+---
+<span class:list={['priority',{'priority-main':priority==='must-read'}]}>{labels[priority]??t('论文','Paper')}</span>

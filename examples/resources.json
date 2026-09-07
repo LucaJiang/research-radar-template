@@ -1,0 +1,32 @@
+[
+  {
+    "id": "example-resource",
+    "name": "Example research archive / 示例资源",
+    "category": "Archive",
+    "summary": "Demonstration only. Replace with a verified resource from your field.",
+    "url": "https://example.com/resource",
+    "topics": [
+      "evaluation"
+    ],
+    "tags": [
+      "example"
+    ],
+    "fields": [
+      {
+        "label": "Coverage / 覆盖范围",
+        "value": "Replace with the relevant population, discipline, language, place, or period."
+      },
+      {
+        "label": "Access / 获取方式",
+        "value": "Record access terms and licensing; unknown until verified."
+      }
+    ],
+    "sources": [
+      {
+        "label": "Placeholder source; replace before publishing",
+        "url": "https://example.com/resource"
+      }
+    ],
+    "updatedAt": "2026-01-01"
+  }
+]

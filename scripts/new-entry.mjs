@@ -1,0 +1,10 @@
+import { mkdir, writeFile } from 'node:fs/promises';
+import { stringify } from 'yaml';
+const [kind,id] = process.argv.slice(2);
+const valid = kind === 'paper' ? /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id ?? '') : /^\d{4}-\d{2}-\d{2}$/.test(id ?? '') && !isNaN(Date.parse(id)) && new Date(id).toISOString().slice(0,10) === id;
+if (!['paper','daily'].includes(kind) || !valid) throw new Error('Use npm run new:paper -- paper-slug OR npm run new:issue -- YYYY-MM-DD');
+const data = kind === 'paper' ? {published:false,title:'Replace with the verified paper title',authors:'Replace with authors',date:new Date().toISOString().slice(0,10),source:'Replace with journal or preprint server',paperUrl:'https://example.com/replace',priority:'worth-reading',summary:'Replace with a verified summary',whyItMatters:'Explain relevance to your research questions',topics:[],readingDepth:'abstract',peerReviewed:false} : {published:false,date:id,title:'New research issue',summary:'Replace with an issue summary',topics:[],papers:[],briefs:[]};
+const directory = `src/content/${kind === 'paper' ? 'papers' : 'daily'}`;
+await mkdir(directory,{recursive:true});
+await writeFile(`${directory}/${id}.md`,`---\n${stringify(data)}---\n\n${kind === 'paper' ? '## Research question\n\n## Method\n\n## Evidence\n\n## Limitations\n\n## Sources\n' : 'Add paper IDs to the papers list after reviewing their notes.\n'}`,{flag:'wx'});
+console.log(`Created draft ${directory}/${id}.md. Review before setting published: true.`);

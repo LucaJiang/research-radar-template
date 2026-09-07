@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import PaperCard from '../components/PaperCard.astro';
+import ResourceBrief from '../components/ResourceBrief.astro';
+import { catalog, isoDate, formatDate } from '../lib/catalog';
+import { t, withBase } from '../lib/site';
+const { issues, resolve } = await catalog();
+const latest = issues[0];
+const papers = latest ? resolve(latest) : [];
+---
+<Base>
+  {latest ? <>
+    <header class="issue-header">
+      <div class="eyebrow"><span>{t('最新一期','Latest issue')}</span><time datetime={isoDate(latest.data.date)}>{formatDate(latest.data.date)}</time><span>{papers.length} {t('篇论文','papers')}</span></div>
+      <h1>{latest.data.title}</h1><p>{latest.data.summary}</p>
+    </header>
+    <div class="section-bar"><h2>{t('论文精选','Selected papers')}</h2><a href={withBase(`/daily/${latest.id}/`)}>{t('本期链接','Issue permalink')} ↗</a></div>
+    <section class="paper-list">{papers.map((p,i) => <PaperCard paper={p} index={i+1}/>)}</section>
+    {latest.data.briefs.length > 0 && <section class="briefs"><div class="section-bar"><h2>{t('研究简报','Research briefs')}</h2></div>{latest.data.briefs.map(b => <ResourceBrief brief={b}/>)}</section>}
+    <section class="recent"><div class="section-bar"><h2>{t('往期','Previous issues')}</h2><a href={withBase('/archive/')}>{t('全部归档','All issues')} ↗</a></div>
+      {issues.slice(1,4).map(e => <a class="archive-row" href={withBase(`/daily/${e.id}/`)}><time>{isoDate(e.data.date)}</time><strong>{e.data.title}</strong><span>{e.data.papers.length} →</span></a>)}
+    </section>
+  </> : <header class="issue-header"><h1>{t('暂无已发布日报','No published issues yet')}</h1><p>{t('首期内容正在整理中。','The first issue is being prepared.')}</p></header>}
+</Base>

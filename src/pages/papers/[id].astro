@@ -1,0 +1,47 @@
+---
+import { site, t, withBase } from '../../lib/site';
+import Base from '../../layouts/Base.astro';
+import PriorityBadge from '../../components/PriorityBadge.astro';
+import { render } from 'astro:content';
+import { publishedIssues, publishedPapers, iso } from '../../lib/issues';
+import { topicLabel } from '../../data/topics';
+
+export async function getStaticPaths() {
+  return (await publishedPapers()).map(paper => ({ params: { id: paper.id }, props: { paper } }));
+}
+
+const { paper } = Astro.props;
+const { Content, headings } = await render(paper);
+const issues = await publishedIssues();
+const issue = issues.find(d => d.data.papers.includes(paper.id));
+const toc = headings.filter(h => h.depth === 2);
+---
+<Base title={`${paper.data.shortTitle ?? paper.data.title} · ${site.title}`} description={paper.data.summary}>
+  <div class="article-layout">
+    <article class="review-article">
+      {issue && <a class="back" href={withBase(`/daily/${issue.id}/`)}>← {iso(issue.data.date)} {t('日报','issue')}</a>}
+      <header class="article-header">
+        <div class="paper-meta"><span class="journal">{paper.data.source}</span><time datetime={iso(paper.data.date)}>{iso(paper.data.date)}</time>{paper.data.versionDate && <span>{paper.data.version} {t('更新','updated')} <time datetime={iso(paper.data.versionDate)}>{iso(paper.data.versionDate)}</time></span>}<PriorityBadge priority={paper.data.priority}/></div>
+        <h1>{paper.data.shortTitle ?? paper.data.title}</h1>
+        {paper.data.shortTitle && <p class="original-title">{paper.data.title}</p>}
+        <p class="authors">{paper.data.authors}</p>
+        <div class="article-actions">
+          <a href={paper.data.paperUrl} target="_blank" rel="noreferrer">{t("论文原文 ↗","Original paper \u2197")}</a>
+          {paper.data.pdfUrl && <a href={paper.data.pdfUrl} target="_blank" rel="noreferrer">PDF ↗</a>}
+          {paper.data.codeUrl && <a href={paper.data.codeUrl} target="_blank" rel="noreferrer">{t("代码 ↗","Code \u2197")}</a>}
+          {paper.data.resourceUrl && <a href={paper.data.resourceUrl} target="_blank" rel="noreferrer">{t("数据资源 ↗","Resources \u2197")}</a>}
+          <span>{paper.data.example ? t('模板示例，非真实论文','Template example, not a real paper') : paper.data.peerReviewed ? (paper.data.version ?? t('已同行评议','Peer reviewed')) : `${t('预印本','Preprint')}${paper.data.version ? ` · ${paper.data.version}` : ''}`}</span>
+        </div>
+        {paper.data.readingDepth === 'abstract' && <p class="reading-depth">{t('仅核验摘要，尚未阅读全文。','Abstract checked; full text has not been reviewed.')}</p>}
+        <p class="article-lead">{paper.data.summary}</p>
+      </header>
+      <details class="mobile-toc"><summary>{t("本文目录","On this page")}</summary><nav aria-label={t("本文目录","On this page")}>{toc.map(h => <a href={`#${h.slug}`}>{h.text}</a>)}</nav></details>
+      <div class="prose"><Content/></div>
+      <footer class="article-footer">
+        <div class="tags">{paper.data.topics.map(t => <a href={withBase(`/topics/${t}/`)}>{topicLabel(t)}</a>)}</div>
+        {paper.data.doi && <p>DOI <a href={`https://doi.org/${paper.data.doi}`} target="_blank" rel="noreferrer">{paper.data.doi}</a></p>}
+      </footer>
+    </article>
+    <aside class="toc"><span>{t("本文目录","On this page")}</span><nav>{toc.map(h => <a href={`#${h.slug}`}>{h.text}</a>)}</nav></aside>
+  </div>
+</Base>

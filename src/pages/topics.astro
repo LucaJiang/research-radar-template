@@ -1,0 +1,13 @@
+---
+import { site, t, withBase } from '../lib/site';
+import Base from '../layouts/Base.astro';
+import { topics } from '../data/topics';
+import { publishedPapers } from '../lib/issues';
+const papers = await publishedPapers();
+---
+<Base title={`${t('研究主题','Research topics')} · ${site.title}`}>
+  <header class="page-heading"><div class="eyebrow">Research areas</div><h1>{t("研究主题","Research topics")}</h1></header>
+  <section class="topic-grid">
+    {topics.map(topic => <a class="topic-card" href={withBase(`/topics/${topic.slug}/`)}><span class="topic-count">{papers.filter(p => p.data.topics.includes(topic.slug)).length} {t('篇','papers')}</span><h2>{topic.label}</h2><p>{topic.description}</p><span aria-hidden="true">↗</span></a>)}
+  </section>
+</Base>

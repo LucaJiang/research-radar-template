@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import { publishedIssues, iso } from '../lib/issues';
+import { site, t, withBase } from '../lib/site';
+const issues = await publishedIssues();
+---
+<Base title={`${t('归档','Archive')} · ${site.title}`}>
+<header class="page-heading"><h1>{t('日报归档','Issue archive')}</h1></header>
+{issues.map(e => <a class="archive-row" href={withBase(`/daily/${e.id}/`)}><time>{iso(e.data.date)}</time><div><h2>{e.data.title}</h2><p>{e.data.summary}</p></div><span>{e.data.papers.length} →</span></a>)}
+{!issues.length && <p>{t('暂无已发布日报。','No published issues yet.')}</p>}
+</Base>

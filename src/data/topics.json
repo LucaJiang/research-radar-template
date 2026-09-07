@@ -1,0 +1,14 @@
+[
+  {
+    "slug": "methods",
+    "label": "Methods / 研究方法",
+    "shortLabel": "Methods",
+    "description": "Models, algorithms, assumptions, and inference."
+  },
+  {
+    "slug": "evaluation",
+    "label": "Evaluation / 评估与验证",
+    "shortLabel": "Evaluation",
+    "description": "Benchmarks, reproducibility, and independent validation."
+  }
+]

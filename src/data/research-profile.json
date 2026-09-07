@@ -1,0 +1,23 @@
+{
+  "field": "Replace with your research field",
+  "questions": [
+    "Which research questions should this radar help answer?"
+  ],
+  "include": [],
+  "exclude": [],
+  "anchorPapers": [],
+  "preferredSources": [],
+  "selectionExamples": {
+    "include": [],
+    "exclude": []
+  },
+  "timeWindowDays": 7,
+  "maxPapersPerIssue": 5,
+  "notesLanguage": "en",
+  "resources": {
+    "enabled": false,
+    "types": [],
+    "fields": []
+  },
+  "publicationPolicy": "Find candidates, verify sources, review drafts, then publish after owner approval."
+}

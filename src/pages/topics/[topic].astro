@@ -1,0 +1,20 @@
+---
+import { site, t, withBase } from '../../lib/site';
+import Base from '../../layouts/Base.astro';
+import PaperCard from '../../components/PaperCard.astro';
+import { topics } from '../../data/topics';
+import { publishedPapers } from '../../lib/issues';
+
+export function getStaticPaths() {
+  return topics.map(topic => ({ params: { topic: topic.slug }, props: { topic } }));
+}
+
+const { topic } = Astro.props;
+const papers = (await publishedPapers()).filter(p => p.data.topics.includes(topic.slug)).sort((a,b) => +b.data.date - +a.data.date);
+---
+<Base title={`${topic.label} · ${site.title}`}>
+  <a class="back" href={withBase("/topics/")}>{t("← 全部主题","\u2190 All topics")}</a>
+  <header class="page-heading"><div class="eyebrow">{papers.length} {t('篇论文','papers')}</div><h1>{topic.label}</h1><p>{topic.description}</p></header>
+  <section class="paper-list">{papers.map((p,i) => <PaperCard paper={p} index={i + 1}/>)}</section>
+  {!papers.length && <p class="empty-state">{t("暂未收录论文。","No papers yet.")}</p>}
+</Base>
