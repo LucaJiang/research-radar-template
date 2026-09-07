@@ -6,6 +6,12 @@ A customizable static website for following research papers, publishing detailed
 
 Built with Astro, Markdown, JSON, and build-time KaTeX. No backend database, paid API, or AI account is required to run the website.
 
+## Live example
+
+**[Genetic Daily Papers — papers.lucajiang.com](https://papers.lucajiang.com/)** is the original research website from which this template was extracted. Browse it for an example of detailed paper notes, dated archives, topic navigation, search, and a research resource directory in everyday use.
+
+The example site is customized for statistical genetics and related methods. Its research scope, paper collection, and QTL-specific resource fields are personal to that site. Your copy starts with neutral examples, configurable topics, and the resource directory disabled; adapt these to your own field.
+
 ## Start here
 
 1. **Create your own repository.** Click **Use this template → Create a new repository** if the template button is available; otherwise **Fork** this repository. Use a template for a fresh history; fork if you want the upstream relationship. Do not clone this project's URL and then try to push your personal content here.

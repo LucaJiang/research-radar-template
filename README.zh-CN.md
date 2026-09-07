@@ -6,6 +6,12 @@
 
 基于 Astro、Markdown、JSON 和构建时 KaTeX。运行网站不需要后端数据库、付费 API 或 AI 账号。
 
+## 实际使用示例
+
+**[Genetic Daily Papers — papers.lucajiang.com](https://papers.lucajiang.com/)** 是本模板提取自的实际研究网站。可以查看详细论文笔记、按日归档、主题导航、全文搜索和科研资源目录的使用效果。
+
+示例站围绕统计遗传学及相关方法定制，选文范围、论文记录和 QTL 专用资源字段属于该站的个人配置。复制本模板后得到的是通用示例和可配置主题，资源目录默认关闭，可按自己的研究领域调整。
+
 ## 从这里开始
 
 1. **建立自己的仓库。** 如果页面显示 **Use this template → Create a new repository**，用它建立独立历史的新仓库；否则点击 **Fork**。希望保留上游同步关系时也可以选择 Fork。后续克隆和提交都使用你自己的仓库地址。
